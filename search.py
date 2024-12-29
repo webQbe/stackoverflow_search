@@ -86,7 +86,7 @@ def scrape_page(links):
 '''
 def search(query):
     ''' Pass columns into storage '''
-    columns = ["query", "rank", "link", "title", "snippet", "html", "created"] 
+    columns = ["query", "rank", "link", "title", "score", "html", "created"] 
 
     ''' Init storage class ''' 
     storage = DBStorage()  
@@ -117,6 +117,10 @@ def search(query):
 
     ''' Convert to sqlite time format '''
     results["created"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Check results Contents
+    print(results.columns)
+    print(results.head())
 
     ''' Remove extra columns & put columns in right order '''
     results = results[columns]

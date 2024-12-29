@@ -17,7 +17,7 @@ head = """
             color: green;
         }
 
-        .snippet {
+        .score {
             font-size: 0.9rem;
             color: gray;
             margin-bottom: 30px;
@@ -67,7 +67,7 @@ result_template =  """
         </span>
     </p>
     <a href="{link}">{title}</a>
-    <p class="snippet">{snippet}</p>
+    <p class="score">{score} Votes</p>
 """
 
 def show_search_form():
@@ -78,9 +78,6 @@ def run_search(query):
     results = search(query)
 
     rendered = search_template
-
-    # Avoid rendering html included in snippets
-    results["snippet"] = results["snippet"].apply(lambda x: html.escape(x))
 
     # Iterate across rows in results
     for index, row in results.iterrows():

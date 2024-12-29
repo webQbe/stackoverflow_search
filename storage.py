@@ -23,7 +23,7 @@ class DBStorage():
                  rank INTEGER,
                  link TEXT,
                  title TEXT,
-                 snippet TEXT,
+                 score REAL,
                  html TEXT,
                  created DATETIME,
                  relevance INTEGER,
@@ -61,8 +61,8 @@ class DBStorage():
                 title TEXT:
                     Stores the title of the search result.
 
-                snippet TEXT:
-                    Stores a short snippet or summary of the result.
+                score REAL:
+                    Stores floating-point numbers.
 
                 html TEXT:
                     Stores the raw HTML content of the result.
@@ -107,7 +107,7 @@ class DBStorage():
         cur = self.con.cursor()
 
         try:
-            cur.execute('INSERT INTO results (query, rank, link, title, snippet, html, created) VALUES(?,?,?,?,?,?,?)', values)
+            cur.execute('INSERT INTO results (query, rank, link, title, score, html, created) VALUES(?,?,?,?,?,?,?)', values)
 
             ''' Execute the SQL Insert Command:
                 The SQL command inserts data into the results table.
@@ -115,7 +115,7 @@ class DBStorage():
                     Placeholders (?): Prevent SQL injection by parameterizing inputs.
 
                 values: Contains the actual data to be inserted, matching the column order:
-                    query, rank, title, snippet, html, created.
+                    query, rank, title, score, html, created.
             
             
             '''
