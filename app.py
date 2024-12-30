@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from search import search # Import Search() we created
 import html # To render html
+from filter import Filter # Import filter class
 from storage import DBStorage 
+
 
 # Run Flask server with  'flask --debug run --port 5001'
 
@@ -76,6 +78,8 @@ def show_search_form():
 
 def run_search(query):
     results = search(query)
+    fi = Filter(results) # Init Filter
+    results = fi.filter() # Re-rank results
 
     rendered = search_template
 
