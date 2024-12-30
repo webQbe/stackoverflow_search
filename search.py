@@ -103,6 +103,10 @@ def search(query):
     ''' Find results with search_api(query) '''
     results = search_api(query)
 
+    # Check results Contents
+    print(results.columns)
+    print(results.head())
+
     ''' Scrape html from pages and store in dataframe '''
     results["html"] = scrape_page(results["link"])
     # Filter rows with with empty html column
@@ -117,10 +121,6 @@ def search(query):
 
     ''' Convert to sqlite time format '''
     results["created"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-
-    # Check results Contents
-    print(results.columns)
-    print(results.head())
 
     ''' Remove extra columns & put columns in right order '''
     results = results[columns]

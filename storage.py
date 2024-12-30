@@ -23,7 +23,7 @@ class DBStorage():
                  rank INTEGER,
                  link TEXT,
                  title TEXT,
-                 score REAL,
+                 score INTEGER,
                  html TEXT,
                  created DATETIME,
                  relevance INTEGER,
@@ -61,8 +61,8 @@ class DBStorage():
                 title TEXT:
                     Stores the title of the search result.
 
-                score REAL:
-                    Stores floating-point numbers.
+                score INTEGER:
+                    Represents total user votes
 
                 html TEXT:
                     Stores the raw HTML content of the result.
