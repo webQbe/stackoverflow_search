@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchMe</title>
+    <!-- LOAD FONTAWESOME -->
+    <link rel="stylesheet" href="../fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <!-- IMPORT FONT ROBOTO REGULAR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- IMPORT COMPILED CSS -->
+    <link rel="stylesheet" href="dist/css/style.min.css">
+
+     <!-- LOAD JAVASCRIPT -->
+    <script src="js/main.js" type="module"></script>
+
+</head>
+<body>
+    <main> 
+        <!-- SEMANTIC ELEMENT -->
+        <h1 class="offscreen">
+            <!-- FOR SCREEN READERS -->
+            StackSearch - A StackExchange Powered Search Engine
+        </h1>
+        <section class="searchEntry">
+            <h2 class="offscreen">
+                 <!-- FOR SCREEN READERS -->
+                Search Term Entry
+            </h2>
+            <div class="logo" aria-hidden="true">
+                <!-- StackSearch! / add color class to each letter -->
+                <span class="blue">S</span>
+                <span class="yellow">t</span>
+                <span class="green">a</span>
+                <span class="red">c</span>
+                <span class="yellow">k</span>
+                 <span class="blue">S</span>
+                 <span class="red">e</span>
+                 <span class="yellow">a</span>
+                 <span class="blue">r</span>
+                 <span class="green">c</span>
+                 <span class="red">h</span>
+                 <span class="red exclaim">!</span>
+            </div>
+            <form id="searchBar" class="searchBar" role="search">
+                <label for="search" class="offscreen">
+                    <!-- FOR SCREEN READERS -->
+                     Enter a search term or phrase
+                </label>
+                <input type="text" id="search" autocomplete="off" role="searchbox"/> 
+
+                <div id="clear" class="none button clear" role="button" tabindex="0" aria-label="clear search terms"><i class="fas fa-times"></i><!-- CLEAR TEXT BUTTON --></div>
+
+                <button id="searchButton" class="button searchButton" type="submit" aria-label="Submit button"><i class="fas fa-search blue"></i><!-- SUBMIT BUTTON --></button>
+            </form>
+        </section>
+        <section class="results">
+            <h2 class="offscreen">Search Results</h2>
+            <div class="statsBar">
+                <div id="stats" class="stats" aria-live="assertive">
+                    <!-- SHOW RESULT COUNT 
+                         aria-live="assertive": screen-reader announces result count -->
+                </div>
+            </div>
+            <div id="searchResults" class="searchResults">
+                <!-- SHOW SEARCH RESULTS -->
+            <div class="resultItem">
+                    <div class="resultTitle">
+                        <p class="resultRank">1.0: <a href="https://stackoverflow.com">Result Title</a></p>
+                    </div>
+                    <div class="resultContents">
+                         <div class="resultText">
+                            <p class="resultScore">1000 Votes</p>
+                            <p class="resultLink">https://stackoverflow.com</p>
+                         </div>
+                    </div>
+            </div>
+            
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p style="font-size: small;"><span aria-hidden="true">&lt;&lt;</span>Powered by <a href="https://stackapps.com" target="_blank">StackApps</a> <span aria-hidden="true">&gt;&gt;</span></p>
+    
+      <!-- aria-hidden="true" Screen-reader not read << >> symbols -->
+
+    </footer>
+</body>
+</html>

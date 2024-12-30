@@ -1,0 +1,136 @@
+.searchEntry{
+    @include flexColumn;  /* Including a mixin */ 
+    padding-top: 40px;
+    align-items: center;
+
+
+    .logo{
+
+        letter-spacing: -5px;
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        align-items: center;
+        @include mq(768px){/* Including a media query mixin with min width */ 
+            /* Bigger font & letter spacing for tablet size */
+            font-size: 3rem;
+            letter-spacing: -10px;
+        }
+    }
+
+    .searchBar{
+        /* Overall Form */
+        width: 90vw;
+        display: flex; /* The child elements are laid out horizontally (in a row). */
+        border: 2px solid $search-bar-border;
+        border-radius: 500px;
+        padding: 0.1rem 0.5rem 0.1rem 0.5rem; 
+        @include mq(768px){
+            width: 60vw; /* Smaller search bar as screen gets bigger */
+            padding: 0.5rem 0.75rem; /* TB & LR */
+        }
+        @include mq(1025px){
+            width: 50vw;
+        }
+
+        /* Style text input */
+        /*  target any <input> element with the type attribute set to "text" */
+        input[type="text"]{
+            flex-grow: 1; 
+            /* Element will grow to fill any available space in the flex container, 
+               sharing container proportionally with other flex items that also have 
+               flex-grow set. */
+               
+            font-size: 0.75rem;
+            text-align: left;
+            letter-spacing: 0.05rem;
+            border: 0;
+            outline: none;
+            min-width: 150px;
+            @include mq(768px){
+                font-size: 1rem;
+                letter-spacing: 0.05rem;
+            }
+        }
+
+        /* Style buttons */
+        .button{
+            cursor: pointer;
+            border: 0;
+            background: transparent; /* Since FA icon is shown, not actual button */
+            min-width: 48px;
+            min-height: 48px;
+            outline: none; /* Default */
+
+            /* Style FA Icons */
+            i{
+                font-family: "Font Awesome 6 Free";
+                font-size: 1rem;
+                @include mq(768px){
+                    font-size: 1rem;
+                }
+            }
+        }
+
+        /* Mouse Over Styles */
+        .button:hover, 
+        .button:focus {
+
+            i {
+                padding-bottom: 0.5rem;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;  
+            }
+        } 
+
+
+        .searchButton:hover,
+        .searchButton:focus {
+
+            i{
+                color: $logo-green;  
+            }
+        }
+
+        /* Clear Input X button */
+        .clear:hover,
+        .clear:focus {
+
+            i{
+                color: $logo-red;
+            }
+        }
+
+        .searchButton{
+            @include mq(768px){
+                padding-left: 1rem; /* Add left-padding on bigger screens */
+            } 
+        }
+
+        .clear{
+            justify-content: center;
+            align-items: center;
+            color: $stats-color;
+            border-right: thin solid $clear-button-color;
+            @include mq(768px){
+                padding: 0 1rem; /* Add LR padding on bigger screens */
+            }
+        }
+    }
+
+    .searchBar:hover,
+    .searchBar:focus-within {
+        /* .searchBar:focus-within - If a user clicks or tabs
+          into an [input field] or [button] inside the .searchBar 
+          container, the :focus-within pseudo-class becomes active
+          for the .searchBar element. */
+
+        box-shadow: 0 2px 5px 2px $search-bar-border; /* Shadow breakdown:
+            0: Horizontal offset (no horizontal shift).
+            2px: Vertical offset (shadow is 2 pixels below the element).
+            5px: Blur radius (softness of the shadow).
+            2px: Spread radius (size of the shadow). 
+            $search-bar-border: shadow color */
+    }
+
+}

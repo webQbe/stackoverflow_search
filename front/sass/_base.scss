@@ -1,0 +1,111 @@
+
+/* Variables */
+$search-bar-border: #e6e6e6; 
+$stats-color: #70757a; /* Stats text color */
+$clear-button-color: #d9d9d9;
+$background-color: #fff;
+$font-color: #000;
+$logo-blue: #4885ed;
+$logo-red: #db3236;
+$logo-yellow:#ffc107;
+$logo-green:#3cba54;
+$link-color: #1a0dab;
+$link-visited-color: #609;
+$link-outline-color: #000;
+$font-stack: "Roboto", Arial, sans-serif;
+
+
+%flex {
+    /* This is a placeholder selector in SCSS. 
+       It is not rendered into the final CSS directly. 
+       Instead, it is meant to be extended by other selectors. 
+       It helps create reusable styles. 
+
+       Instead of duplicating  
+        display: flex; 
+        align-items: center; code everywhere, 
+       you define it once and reuse it.*/
+
+    display: flex; /* Use flexbox layout model, enable its child elements to be laid out in a flexible and efficient way. */
+    align-items: left; /* Align all child elements along the vertical axis in the center of the container. */
+}
+
+
+@mixin flexColumn{
+
+    /* Mixin are reusable throughout your SCSS code. 
+       You can include this mixin in any selector using @include. */
+
+@extend  %flex;
+    /* Extend %flex placeholder defined earlier,
+      this inherits the styles associated with %flex. */
+
+flex-direction: column; /* The items will stack vertically. */
+
+justify-content: flex-start; /* Aligns flex items along main axis (vertical axis in this case, because of flex-direction: column), starting at the top of the container. */
+
+}
+
+
+@mixin flexCenter{
+
+    @extend %flex;
+    justify-content: center;
+    
+}
+
+@mixin mq($size){
+    /* mq (short for "media query") 
+        This creates a mixin named mq that takes one parameter, $size.
+        $size represents the minimum width.
+    */
+    @media only screen and (min-width: $size){
+        /* @media rule is used for applying styles based on device characteristics, such as screen size. */
+        @content;
+        /* Whatever you include inside the mixin in your SCSS file will replace @content when compiled. */
+    }
+}
+
+/* Basic CSS page reset */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    background-color: $background-color;
+    color: $font-color;
+    width: 100vw;
+    min-height: 100vh;
+    font-family: $font-stack;
+    font-size: 22px;
+} 
+
+main{
+    @include flexColumn; /* Including a mixin */ 
+    min-height: calc(100vh - 60px); /* 60px lower that 100% viewport height */
+}
+
+footer{
+    width: 100%;
+    height: 60px; 
+    @include flexCenter;
+
+    p {
+        color: $stats-color;
+        font-size: 0.5rem;
+        @include mq(768px){ /* Including a media query mixin with min width */ 
+            /* Bigger font for tablet size */
+            font-size: 1rem; 
+        }
+
+        a {
+            color: $stats-color;
+        }
+    }
+}
+
+img{
+    display: block;
+}

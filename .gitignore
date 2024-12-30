@@ -1,3 +1,4 @@
-stackvenv/
+flaskvenv/
 __pycache__/
+fontawesome-free-6.6.0-web/
 links.db
