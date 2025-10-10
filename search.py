@@ -6,56 +6,61 @@ from storage import DBStorage
 from urllib.parse import quote_plus
 from datetime import datetime
 
-''' Define search_api() to connect to Stack Exchange API and return search results '''
+''' Define search_api() to connect API endpoint & 
+    return search results 
+    Each page contains 10 results '''
 def search_api(query, pages=int(RESULT_COUNT/10)):
 
     results = []
 
-    for page in range(1, pages + 1):  # Pages start from 1 for Stack Exchange API
-        ''' Format search url '''
-        params = {
-            "order": "desc",
-            "sort": "relevance",
-            "q": quote_plus(query), # format query string
-            "site": SITE,
-            "page": page,
-            "pagesize": 10,
-            "key": STACKEXCHANGE_API_KEY
-        }
+    for i in range(0, pages):
+        ''' start defines 1st record on each page'''
+        start = i * 10 + i
 
-        # Make a request to Stack Exchange API
-        response = requests.get(STACKEXCHANGE_SEARCH_URL, params=params)
-        response.raise_for_status()  # Raise exception for HTTP errors
+        ''' Format search url 
+            'quote_plus()' replaces invalid characters with valid url characters
+            'start' defines which page we need results from
+        '''
+        url = SEARCH_URL.format(
+            key = SEARCH_KEY,
+            cx = SEARCH_ID,
+            query = quote_plus(query),
+            start = start
+        )
+
+        ''' Check formatted url '''
+        print(url)
+
+        ''' Make a request to google custom search api '''
+        response = requests.get(url)
+
+        ''' Decode json response '''
         data = response.json()
 
-        # Get items from data & append to results
-        if "items" in data:
-            results += data["items"]
+        ''' Get items from data & append to results (list of dic) '''
+        results += data["items"]
 
+    ''' Create DataFrame with results '''
+    res_df = pd.DataFrame.from_dict(results)
+
+    ''' Add a New Column (rank) '''
+    res_df["rank"] = list(range(1, res_df.shape[0] + 1))
+    ''' Creates a sequence from 1 to the number of rows.      
+        Example for 2 rows: [1, 2].
+        Assigns this list to a new column rank.
+    '''
+
+    ''' Reorder Columns '''
+    res_df = res_df[["link", "rank", "snippet", "title"]]
+    ''' Reorders the columns to match the specified order
+        If there are additional columns in res_df, they are excluded from the new DataFrame.
+    '''
     
-    if results:
-        # Create DataFrame with results
-        res_df = pd.DataFrame(results)
-
-        # Select relevant columns
-        res_df = res_df[["title", "link", "score"]]
-
-        # Add rank column
-        # Assign rank to each row, starting at 1 and incrementing by 1 for each result
-        res_df["rank"] = list(range(1, res_df.shape[0] + 1))
-
-        # Columns are reordered so that rank appears first
-        res_df = res_df[["rank", "title", "link", "score"]]
-
-    else:
-        # If results is empty or None, 
-        # an empty DataFrame is created with predefined columns
-        res_df = pd.DataFrame(columns=["rank", "title", "link", "score"])
-
     return res_df
 
 
-''' Define scrape_page() that takes in a list of links & returns full html of pages '''
+''' Define scrape_page() that takes in a list of links & 
+    returns full html of pages '''
 def scrape_page(links):
 
     html = []
@@ -86,10 +91,13 @@ def scrape_page(links):
 '''
 def search(query):
     ''' Pass columns into storage '''
-    columns = ["query", "rank", "link", "title", "score", "html", "created"] 
+    columns = ["query", "rank", "link", "title", "snippet", "html", "created"] 
 
     ''' Init storage class ''' 
     storage = DBStorage()  
+
+    ''' Site to search '''
+    query = query + " site:stackoverflow.com"
 
     ''' Check if query has been run already '''
     stored_results = storage.query_results(query)
@@ -103,18 +111,11 @@ def search(query):
     ''' Find results with search_api(query) '''
     results = search_api(query)
 
-    # Check results Contents
-    print(results.columns)
-    print(results.head())
-
     ''' Scrape html from pages and store in dataframe '''
     results["html"] = scrape_page(results["link"])
-    # Filter rows with with empty html column
+
+    ''' Remove results with empty html '''
     results = results[results["html"].str.len() > 0].copy()
-    ''' [results["html"].str.len() > 0] 
-        Creates a boolean mask where True indicates rows with non-empty html content.
-        With .copy(), a new independent DataFrame is created, ensuring no link to the original.
-    '''
 
     """ Assign columns """
     results["query"] = query
