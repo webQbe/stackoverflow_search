@@ -10,6 +10,9 @@ from datetime import datetime
 ''' Define search_api() to connect API endpoint & 
     return search results 
     Each page contains 10 results '''
+''' Define search_api() to connect API endpoint & 
+    return search results 
+    Each page contains 10 results '''
 def search_api(query, pages=int(RESULT_COUNT/10)):
 
     results = []
@@ -36,11 +39,19 @@ def search_api(query, pages=int(RESULT_COUNT/10)):
         response = requests.get(url)
 
         ''' Decode json response '''
+        ''' Make a request to google custom search api '''
+        response = requests.get(url)
+
+        ''' Decode json response '''
         data = response.json()
 
         ''' Get items from data & append to results (list of dic) '''
         results += data["items"]
+        ''' Get items from data & append to results (list of dic) '''
+        results += data["items"]
 
+    ''' Create DataFrame with results '''
+    res_df = pd.DataFrame.from_dict(results)
     ''' Create DataFrame with results '''
     res_df = pd.DataFrame.from_dict(results)
 
@@ -57,9 +68,24 @@ def search_api(query, pages=int(RESULT_COUNT/10)):
         If there are additional columns in res_df, they are excluded from the new DataFrame.
     '''
     
+    ''' Add a New Column (rank) '''
+    res_df["rank"] = list(range(1, res_df.shape[0] + 1))
+    ''' Creates a sequence from 1 to the number of rows.      
+        Example for 2 rows: [1, 2].
+        Assigns this list to a new column rank.
+    '''
+
+    ''' Reorder Columns '''
+    res_df = res_df[["link", "rank", "snippet", "title"]]
+    ''' Reorders the columns to match the specified order
+        If there are additional columns in res_df, they are excluded from the new DataFrame.
+    '''
+    
     return res_df
 
 
+''' Define scrape_page() that takes in a list of links & 
+    returns full html of pages '''
 ''' Define scrape_page() that takes in a list of links & 
     returns full html of pages '''
 def scrape_page(links):
@@ -94,9 +120,13 @@ def search(query):
 
     ''' Pass columns into storage '''
     columns = ["query", "rank", "link", "title", "snippet", "html", "created"] 
+    columns = ["query", "rank", "link", "title", "snippet", "html", "created"] 
 
     ''' Init storage class ''' 
     storage = DBStorage()  
+
+    ''' Site to search '''
+    query = query + " site:stackoverflow.com"
 
     ''' Site to search '''
     query = query + " site:stackoverflow.com"
@@ -118,6 +148,8 @@ def search(query):
 
     ''' Scrape html from pages and store in dataframe '''
     results["html"] = scrape_page(results["link"])
+
+    ''' Remove results with empty html '''
 
     ''' Remove results with empty html '''
     results = results[results["html"].str.len() > 0].copy()
