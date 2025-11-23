@@ -9,3 +9,16 @@
 1. Create an account & log in to https://stackapps.com/ 
 2. Register app at https://stackapps.com/apps/oauth/register
 3. Get API Key
+
+## Prevent unnecessary page reload by VSCode Live Server
+Open VSCode →  Settings → Extensions → Live Server → Ignore Files and add these patterns:
+    ```
+    {
+        "liveServer.settings.ignoreFiles": [
+            "**/*.py",
+            "**/*.db",
+            "**/back/**",
+            "**/.git/**"
+        ]
+    }
+    ```

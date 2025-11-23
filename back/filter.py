@@ -6,7 +6,7 @@ from settings import *
 
 # Get text inside html
 def get_page_content(row):
-    soup = BeautifulSoup(row["html"])
+    soup = BeautifulSoup(row["html"],  "html.parser")
     text = soup.get_text()
     return text
 

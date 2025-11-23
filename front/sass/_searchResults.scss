@@ -98,18 +98,10 @@
                         font-size: 0.75rem;
                         line-height: 28px;
                     }
+                }
 
-                    .resultLink {
-                        color: $logo-green;
-                    }
-
-                    .resultScore {
-                        color: grey;
-                    }
-
-                    p  {
-                        margin: 0; /* Remove default margins */
-                    }
+                .resultDescription{
+                    color: grey;
                 }
                 
             }

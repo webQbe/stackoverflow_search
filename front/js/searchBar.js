@@ -3,7 +3,7 @@ export const setSearchFocus = () => {
 
     // Select search input & focus
     document.getElementById("search").focus();
-}
+};
 
 // Make Clear Text Button X Visible
 export const showClearTextButton = () => {

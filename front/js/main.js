@@ -29,7 +29,6 @@ document.addEventListener("readystatechange", event => {
 
 
 const initApp = () => {
-
     // Focus search input
     setSearchFocus();
 
@@ -47,32 +46,74 @@ const initApp = () => {
     // On focus & Space OR Enter keydown 
     clear.addEventListener("keydown", clearPushListener);
 
-
-
-
-
-
     // Select form
-    const from = document.getElementById("searchBar");
+    const form = document.getElementById("searchBar");
 
-    // Listen for from submit
-    from.addEventListener("submit",  submitTheSearch);
+    if (form) {
+        // Defensive: ensure form won't do a native submit
+        form.setAttribute("action", "javascript:void(0);");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();   // block other submit handlers
+            // Call existing handler
+            await submitTheSearch(e);
+        }, {capture: true});             // capture early
 
+        // Prevent default submit if Enter pressed in the input (extra safety)
+        const input = document.getElementById("search");
+        if (input) {
+            input.addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter") {
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+                // optionally run search:
+                submitTheSearch(new Event('submit'));
+            }
+            }, {capture:true});
+        }
+    }
+
+    // Ensure the button is non-submitting
+    const button = document.getElementById("searchButton");
+    if (button) {
+        button.type = "button";
+        button.addEventListener("click", submitTheSearch);
+    }
 }
 
 // Procedural Workflow Function
-const submitTheSearch = (event) => {
+const submitTheSearch = async (event) => {
 
     event.preventDefault(); /* Stop page reload */
 
-    // Clear previous results
     clearSearchResults();
 
-    // Process search
-    processTheSearch();
+    if (event && event.preventDefault) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation && event.stopImmediatePropagation();
+    }
 
-    // Focus search input
-    setSearchFocus();
+    console.log("submitTheSearch starting", new Date().toISOString());
+
+    // disable submit button to avoid double submits + indicate busy
+    const submitBtn = event.submitter || document.querySelector('#searchBar button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+        // WAIT for the async processing to finish before continuing
+        await processTheSearch();
+        console.log("submit handler attached")
+        
+    } catch (err) {
+        console.error("Search failed:", err);
+        // Optionally show user-friendly error UI here
+    } finally {
+        // re-enable submit button
+        if (submitBtn) submitBtn.disabled = false;
+        // Focus search input after results processed
+        setSearchFocus();
+    }
 
 }
 
@@ -89,16 +130,17 @@ const processTheSearch = async() => {
 
     // Get results array
     const resultArray = await retrieveSearchResults(searchTerm);
+    
     // Skip if resultArray is empty
-    if(resultArray.length){
-
+    if(Array.isArray(resultArray) && resultArray.length){
         // Build search results
         buildSearchResults(resultArray);
 
     } 
 
     // Set stats line (always called, regardless of results)
-    setStatsLine(resultArray.length);
+    // be defensive: if resultArray is undefined, treat length as 0
+    setStatsLine(Array.isArray(resultArray) ? resultArray.length : 0);
 
 }
 

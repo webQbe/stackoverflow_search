@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SearchMe</title>
+    <title>StackSearch!</title>
     <!-- LOAD FONTAWESOME -->
     <link rel="stylesheet" href="../fontawesome-free-6.6.0-web/css/all.min.css">
 
@@ -46,7 +46,7 @@
                  <span class="red">h</span>
                  <span class="red exclaim">!</span>
             </div>
-            <form id="searchBar" class="searchBar" role="search">
+            <form id="searchBar" class="searchBar" role="search" action="javascript:void(0);">
                 <label for="search" class="offscreen">
                     <!-- FOR SCREEN READERS -->
                      Enter a search term or phrase
@@ -55,7 +55,7 @@
 
                 <div id="clear" class="none button clear" role="button" tabindex="0" aria-label="clear search terms"><i class="fas fa-times"></i><!-- CLEAR TEXT BUTTON --></div>
 
-                <button id="searchButton" class="button searchButton" type="submit" aria-label="Submit button"><i class="fas fa-search blue"></i><!-- SUBMIT BUTTON --></button>
+                <button id="searchButton" class="button searchButton" type="button" aria-label="Submit button"><i class="fas fa-search blue"></i><!-- SUBMIT BUTTON --></button>
             </form>
         </section>
         <section class="results">
@@ -68,18 +68,6 @@
             </div>
             <div id="searchResults" class="searchResults">
                 <!-- SHOW SEARCH RESULTS -->
-            <!-- <div class="resultItem">
-                    <div class="resultTitle">
-                        <p class="resultRank">1.0: <a href="https://stackoverflow.com">Result Title</a></p>
-                    </div>
-                    <div class="resultContents">
-                         <div class="resultText">
-                            <p class="resultScore">1000 Votes</p>
-                            <p class="resultLink">https://stackoverflow.com</p>
-                         </div>
-                    </div>
-            </div> -->
-            
             </div>
         </section>
     </main>

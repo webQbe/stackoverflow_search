@@ -23,7 +23,7 @@ class DBStorage():
                  rank INTEGER,
                  link TEXT,
                  title TEXT,
-                 score INTEGER,
+                 snippet TEXT,
                  html TEXT,
                  created DATETIME,
                  relevance INTEGER,
@@ -61,8 +61,8 @@ class DBStorage():
                 title TEXT:
                     Stores the title of the search result.
 
-                score INTEGER:
-                    Represents total user votes
+                snippet TEXT:
+                    Stores a short snippet or summary of the result.
 
                 html TEXT:
                     Stores the raw HTML content of the result.
@@ -99,23 +99,24 @@ class DBStorage():
 
          ''' Return dataframe '''
          return df
-
-
-    ''' Define insert_row() to store results to db '''
+    
+  
     def insert_row(self, values):
 
         cur = self.con.cursor()
 
         try:
-            cur.execute('INSERT INTO results (query, rank, link, title, score, html, created) VALUES(?,?,?,?,?,?,?)', values)
-
+            cur.execute(
+                    'INSERT INTO results (query, rank, link, title, snippet, html, created) VALUES (?,?,?,?,?,?,?)',
+                    values
+                )
             ''' Execute the SQL Insert Command:
                 The SQL command inserts data into the results table.
                     Column names: Specifies which columns to insert into.
                     Placeholders (?): Prevent SQL injection by parameterizing inputs.
 
                 values: Contains the actual data to be inserted, matching the column order:
-                    query, rank, title, score, html, created.
+                    query, rank, title, snippet, html, created.
             
             
             '''
@@ -132,6 +133,7 @@ class DBStorage():
         '''
 
         cur.close()
+
 
     # Update relevance of a specific result in the database
     def update_relevance(self, query, link, relevance):
