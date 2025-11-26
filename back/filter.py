@@ -52,9 +52,13 @@ class Filter():
         self.content_filter()
 
         # Sort filtered DataFrame by the rank column in ascending order
-        self.filtered = self.filtered.sort_values("rank", ascending=True)
+        # Remove old index, create clean sequence
+        self.filtered = self.filtered.sort_values("rank", ascending=True).reset_index(drop=True)
 
         # Rounds the rank column to the nearest integer
         self.filtered["rank"] = self.filtered["rank"].round()
+
+        # Assign user-friendly sequential ranks for display
+        self.filtered["rank"] = self.filtered.index + 1
 
         return self.filtered
